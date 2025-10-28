@@ -1,3 +1,5 @@
+from importlib.metadata import pass_none
+
 import flet as ft
 from UI.alert import AlertManager
 
@@ -24,6 +26,7 @@ class View:
         # Elementi UI
         self.txt_titolo = None
         self.txt_responsabile = None
+        self.txt_subtitile = None
 
         # Non obbligatorio mettere già qui tutti gli elementi UI
 
@@ -63,7 +66,10 @@ class View:
         pulsante_conferma_responsabile = ft.ElevatedButton("Conferma", on_click=self.controller.conferma_responsabile)
 
         # Altri Pulsanti da implementare (es. "Mostra" e "Cerca")
-        # TODO
+        self.txt_subtitile = ft.Text(value='Automobili', size=20)
+        self.btn_mostra = ft.ElevatedButton("Mostra", on_click=self.aggiorna_listView)
+
+        self.btn_cerca_auto = ft.ElevatedButton('Cerca', on_click=pass_none)
 
         # --- LAYOUT ---
         self.page.add(
@@ -82,7 +88,11 @@ class View:
             ft.Divider(),
 
             # Sezione 3
-            # TODO
+            ft.Row(spacing=10,
+                   controls=[self.txt_subtitile, self.btn_mostra],
+                   alignment=ft.MainAxisAlignment.START),
+            self.lista_auto_ricerca,
+            ft.Divider(),
 
             # Sezione 4
             # TODO
@@ -92,3 +102,10 @@ class View:
         self.page.theme_mode = ft.ThemeMode.DARK if self.toggle_cambia_tema.value else ft.ThemeMode.LIGHT
         self.toggle_cambia_tema.label = "Tema scuro" if self.toggle_cambia_tema.value else "Tema chiaro"
         self.page.update()
+
+    def aggiorna_listView(self, e):
+        self.lista_auto_ricerca.controls.clear()
+        for auto in self.controller.get_automobili():
+            self.lista_auto_ricerca.controls.append(ft.Text(auto))
+
+        self.update()

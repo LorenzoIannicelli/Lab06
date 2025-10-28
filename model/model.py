@@ -36,7 +36,18 @@ class Autonoleggio:
             :return: una lista con tutte le automobili presenti oppure None
         """
 
-        # TODO
+        cnx = get_connection()
+        cursor = cnx.cursor()
+        query = """SELECT * 
+                FROM automobile"""
+        cursor.execute(query)
+        automobili = cursor.fetchall()
+
+        cnx.close()
+        if automobili:
+            return automobili
+        else:
+            return None
 
     def cerca_automobili_per_modello(self, modello) -> list[Automobile] | None:
         """
