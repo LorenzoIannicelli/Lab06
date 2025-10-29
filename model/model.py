@@ -55,4 +55,14 @@ class Autonoleggio:
             :param modello: il modello dell'automobile
             :return: una lista con tutte le automobili di marca e modello indicato oppure None
         """
-        # TODO
+        cnx = get_connection()
+        cursor = cnx.cursor()
+        query = f"""SELECT * FROM automobile WHERE modello = '{modello}'"""
+        cursor.execute(query)
+        automobili = cursor.fetchall()
+
+        cnx.close()
+        if automobili:
+            return automobili
+        else:
+            return None

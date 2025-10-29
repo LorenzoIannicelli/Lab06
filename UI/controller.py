@@ -30,3 +30,6 @@ class Controller:
     # Altre Funzioni Event Handler
     def get_automobili(self):
         return self._model.get_automobili()
+
+    def get_automobili_per_marca(self, modello):
+        return self._model.cerca_automobili_per_modello(modello)

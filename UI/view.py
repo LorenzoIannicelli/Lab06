@@ -67,9 +67,11 @@ class View:
 
         # Altri Pulsanti da implementare (es. "Mostra" e "Cerca")
         self.txt_subtitile = ft.Text(value='Automobili', size=20)
-        self.btn_mostra = ft.ElevatedButton("Mostra", on_click=self.aggiorna_listView)
+        self.btn_mostra = ft.ElevatedButton("Mostra",
+                                            on_click=self.aggiorna_lista_auto)
 
-        self.btn_cerca_auto = ft.ElevatedButton('Cerca', on_click=pass_none)
+        self.btn_cerca_auto = ft.ElevatedButton('Cerca',
+                                                on_click=self.aggiorna_lista_auto_ricerca)
 
         # --- LAYOUT ---
         self.page.add(
@@ -91,11 +93,15 @@ class View:
             ft.Row(spacing=10,
                    controls=[self.txt_subtitile, self.btn_mostra],
                    alignment=ft.MainAxisAlignment.START),
-            self.lista_auto_ricerca,
+            self.lista_auto,
             ft.Divider(),
 
             # Sezione 4
-            # TODO
+            ft.Text('Cerca Automobile', size=20),
+            ft.Row(spacing=10,
+                   controls=[self.input_modello_auto, self.btn_cerca_auto],
+                   alignment=ft.MainAxisAlignment.START),
+            self.lista_auto_ricerca
         )
 
     def cambia_tema(self, e):
@@ -103,9 +109,18 @@ class View:
         self.toggle_cambia_tema.label = "Tema scuro" if self.toggle_cambia_tema.value else "Tema chiaro"
         self.page.update()
 
-    def aggiorna_listView(self, e):
+    def aggiorna_lista_auto(self, e):
+        self.lista_auto.controls.clear()
+        automobili = self.controller.get_automobili()
+        for auto in automobili:
+            self.lista_auto.controls.append(ft.Text(auto))
+
+        self.update()
+
+    def aggiorna_lista_auto_ricerca(self, e):
         self.lista_auto_ricerca.controls.clear()
-        for auto in self.controller.get_automobili():
+        automobili_per_marca = self.controller.get_automobili_per_marca(self.input_modello_auto)
+        for auto in automobili_per_marca:
             self.lista_auto_ricerca.controls.append(ft.Text(auto))
 
         self.update()
