@@ -1,5 +1,3 @@
-from importlib.metadata import pass_none
-
 import flet as ft
 from UI.alert import AlertManager
 
@@ -118,9 +116,17 @@ class View:
         self.update()
 
     def aggiorna_lista_auto_ricerca(self, e):
-        self.lista_auto_ricerca.controls.clear()
-        automobili_per_marca = self.controller.get_automobili_per_marca(self.input_modello_auto)
-        for auto in automobili_per_marca:
-            self.lista_auto_ricerca.controls.append(ft.Text(auto))
-
-        self.update()
+        try:
+            self.lista_auto_ricerca.controls.clear()
+            automobili_per_marca = self.controller.get_automobili_per_marca(self.input_modello_auto.value)
+            if not automobili_per_marca:
+                raise Exception('Errore: nessuna auto trovata!')
+            else :
+                for auto in automobili_per_marca:
+                    self.lista_auto_ricerca.controls.append(ft.Text(auto))
+        except Exception as e:
+            alert = AlertManager(self.page)
+            alert.show_alert(f"❌ {e}")
+        finally:
+            self.input_modello_auto.value = ''
+            self.update()

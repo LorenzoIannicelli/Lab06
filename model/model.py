@@ -41,7 +41,16 @@ class Autonoleggio:
         query = """SELECT * 
                 FROM automobile"""
         cursor.execute(query)
-        automobili = cursor.fetchall()
+        automobili = []
+        for auto in cursor.fetchall():
+            codice = auto[0]
+            marca = auto[1]
+            modello = auto[2]
+            anno = auto[3]
+            posti = auto[4]
+            disponibile = True if auto[5] == 1 else False
+
+            automobili.append(Automobile(codice, marca, modello, anno, posti, disponibile))
 
         cnx.close()
         if automobili:
@@ -59,10 +68,19 @@ class Autonoleggio:
         cursor = cnx.cursor()
         query = f"""SELECT * FROM automobile WHERE modello = '{modello}'"""
         cursor.execute(query)
-        automobili = cursor.fetchall()
+        automobili_per_modello = []
+        for auto in cursor.fetchall():
+            codice = auto[0]
+            marca = auto[1]
+            modello = auto[2]
+            anno = auto[3]
+            posti = auto[4]
+            disponibile = True if auto[5] == 1 else False
+
+            automobili_per_modello.append(Automobile(codice, marca, modello, anno, posti, disponibile))
 
         cnx.close()
-        if automobili:
-            return automobili
+        if automobili_per_modello:
+            return automobili_per_modello
         else:
             return None
